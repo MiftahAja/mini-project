@@ -4,7 +4,9 @@ import com.example.mini_project.model.Category;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.example.mini_project.repository.ProductRepo;
+import com.example.mini_project.repository.StockMutationRepo;
 import com.example.mini_project.request.ProductCreate;
+import com.example.mini_project.request.UpdateProduct;
 import com.example.mini_project.model.Product;
 import com.example.mini_project.repository.CategoryRepo;
 
@@ -12,10 +14,12 @@ import com.example.mini_project.repository.CategoryRepo;
 public class ProductService {
     private ProductRepo productRepo;
     private CategoryRepo categoryRepo;
+    private StockMutationRepo stockMutationRepo; 
 
-    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo) {
+    public ProductService(ProductRepo productRepo, CategoryRepo categoryRepo, StockMutationRepo stockMutationRepo) {
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
+        this.stockMutationRepo = stockMutationRepo;
     }
 
     public Product tambahProduct(ProductCreate requestCreate) {
@@ -50,28 +54,44 @@ public class ProductService {
         return productRepo.findAll();
     }
 
-    public Product updateProduct(Long id, Product databaru) {
+    public Product updateProduct(Long id, UpdateProduct requestUpdate) {
         Product product = productRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(null);
 
-        product.setName(databaru.getName());
-        product.setPrice(databaru.getPrice());
-        product.setCategory(databaru.getCategory());
-
+        product.setName(requestUpdate.getName());
+        product.setPrice(requestUpdate.getPrice());
+        product.setSkuKode(requestUpdate.getSkuKode());
+        product.setCategory(categoryRepo.findById(requestUpdate.getCategoryId()).orElse(null));
         return productRepo.save(product);
     }
 
     public Product restoreProduct(Long id) {
         Product product = productRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(null);
+        
         product.setIsActive(true);
         return productRepo.save(product);
     }
 
     public Product removeProduct(Long id) {
         Product product = productRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(null);
+                
         product.setIsActive(false);
         return productRepo.save(product);
+    }
+
+    public Product deleteProduct(Long id) {
+        Product product = productRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product dengan Id " + id + " tidak ditemukan"));
+
+        if (product.getIsActive()) {
+            throw new RuntimeException("Product masih aktif, tidak dapat dihapus");
+        }
+
+        stockMutationRepo.nullifyProduct(id);
+        
+        productRepo.delete(product);
+        return product;
     }
 }

@@ -1,15 +1,13 @@
 package com.example.mini_project.request;
 
-
-import jakarta.validation.constraints.NotBlank; 
-import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProductCreate {
-
+public class UpdateProduct {
     @NotBlank(message = "Product name must not be empty")
     private String name;
 
@@ -23,6 +21,4 @@ public class ProductCreate {
     @NotNull(message = "Category id must not be empty")
     @JsonProperty("category_id")
     private Long categoryId;
-
-
 }

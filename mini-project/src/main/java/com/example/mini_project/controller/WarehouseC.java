@@ -30,21 +30,47 @@ public class WarehouseC {
 
     @PostMapping
     public ResponseEntity<WebResponse<Warehouse>> tambahGudang(@Valid @RequestBody AddWarehouse warehouseCreate) {
+        
+        try {
         return ResponseEntity.status(HttpStatus.CREATED).body(
             WebResponse.<Warehouse>builder()
                 .status("Success")
                 .message("Gudang berhasil ditambahkan")
                 .data(warehouseService.tambahGudang(warehouseCreate))
                 .build());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<Warehouse>builder()
+                    .status("Failed")
+                    .message("Gudang dengan kode " + warehouseCreate.getCode() + " sudah ada")
+                    .build());
+        }
+         catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<Warehouse>builder()
+                    .status("Failed")
+                    .message("Gudang gagal ditambahkan")
+                    .build());
+        }
     }
 
     @GetMapping
-    public WebResponse<List<Warehouse>> getAllGudang() {
-        return WebResponse.<List<Warehouse>>builder()
-            .status("Success")
-            .message("Berhasil mengambil semua gudang")
-            .data(warehouseService.getAllGudang())
-            .build();
+    public ResponseEntity<WebResponse<List<Warehouse>>> getAllGudang() {
+        
+        try {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            WebResponse.<List<Warehouse>>builder()
+                .status("Success")
+                .message("Berhasil mengambil semua gudang")
+                .data(warehouseService.getAllGudang())
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<List<Warehouse>>builder()
+                    .status("Failed")
+                    .message("Gudang tidak ditemukan")
+                    .build());
+        }
     }
 
     @PutMapping("update/{id}")
@@ -54,6 +80,6 @@ public class WarehouseC {
                 .status("Success")
                 .message("Gudang berhasil diubah")
                 .data(warehouseService.updateWarehouse(id, warehouse))
-                .build());
+                .build());  
     }
 }

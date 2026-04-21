@@ -41,7 +41,7 @@ public class WarehouseService {
 
     public Warehouse updateWarehouse(Long id, Warehouse databaru)  {
         Warehouse warehouse = warehouseRepo.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Gudang tidak ditemukan"));
+            .orElseThrow(() -> new RuntimeException("Gudang tidak ditemukan id: " + id));
 
         if (warehouseRepo.existsByCodeAndIdNot(databaru.getCode(), id)) {
             throw new IllegalArgumentException("Kode gudang " + databaru.getCode() + " sudah dipakai");

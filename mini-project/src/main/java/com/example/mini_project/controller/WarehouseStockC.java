@@ -1,6 +1,7 @@
 package com.example.mini_project.controller;
 
-// import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,20 +23,38 @@ public class WarehouseStockC {
     }
 
     @PostMapping
-    public WebResponse<WarehouseStock> stockIn(@Valid @RequestBody AddWarehouseStock request) {
+    public ResponseEntity<WebResponse<WarehouseStock>> stockIn(@Valid @RequestBody AddWarehouseStock request) {
         warehouseStockService.stockIn(request);
-        return WebResponse.<WarehouseStock>builder()
-            .status("Success")
-            .message("Stock berhasil ditambahkan")
-            .build();
+        try {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            WebResponse.<WarehouseStock>builder()
+                .status("Success")
+                .message("Stock berhasil ditambahkan")
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<WarehouseStock>builder()
+                    .status("Failed")
+                    .message("Stock gagal ditambahkan")
+                    .build());
+        }
     }
 
     @PostMapping("/transfer")
-    public WebResponse<WarehouseStock> transferStock(@Valid @RequestBody TransferStockWarehouse request) {
+    public ResponseEntity<WebResponse<WarehouseStock>> transferStock(@Valid @RequestBody TransferStockWarehouse request) {
         warehouseStockService.transferStock(request);
-        return WebResponse.<WarehouseStock>builder()
-            .status("Success")
-            .message("Stock berhasil ditambahkan")
-            .build();
+        try {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            WebResponse.<WarehouseStock>builder()
+                .status("Success")
+                .message("Stock berhasil ditambahkan")
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<WarehouseStock>builder()
+                    .status("Failed")
+                    .message("Stock gagal ditambahkan")
+                    .build());
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.mini_project.controller;
 
 import java.util.List;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity; 
 import com.example.mini_project.model.Category;
 import com.example.mini_project.response.WebResponse;
@@ -24,36 +25,56 @@ public class CategoryC {
     }
     
     @PostMapping
-    public WebResponse<Category> tambahCategory(@Valid @RequestBody Category category) {
-        return WebResponse.<Category>builder()
-            .status("Success")
-            .message("Category berhasil ditambahkan")
-            .data(categoryService.tambahCategory(category))
-            .build();
+    public ResponseEntity<WebResponse<Category>> tambahCategory(@Valid @RequestBody Category category) {
+        try {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            WebResponse.<Category>builder()
+                .status("Success")
+                .message("Category berhasil ditambahkan")
+                .data(categoryService.tambahCategory(category))
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<Category>builder()
+                    .status("Failed")
+                    .message("Category gagal ditambahkan")
+                    .build());
+        }
     }
 
     @PutMapping("/{id}")
-    public WebResponse<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        return WebResponse.<Category>builder()
-            .status("Success")
-            .message("Category berhasil diubah")
-            .data(categoryService.updateCategory(id, category))
-            .build();
+    public ResponseEntity<WebResponse<Category>> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        try {
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+            WebResponse.<Category>builder()
+                .status("Success")
+                .message("Category berhasil diubah")
+                .data(categoryService.updateCategory(id, category))
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<Category>builder()
+                    .status("Failed")
+                    .message("Category gagal diubah")
+                    .build());
+        }
     }
 
     @GetMapping
-    public WebResponse<List<Category>> getAllCategory() {
-        return WebResponse.<List<Category>>builder()
-            .status("Success")
-            .message("Berhasil mengambil semua category")
-            .data(categoryService.getAllCategory())
-            .build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<WebResponse<List<Category>>> getAllCategory() {
+        try {
+        return ResponseEntity.status(HttpStatus.OK).body(
+            WebResponse.<List<Category>>builder()
+                .status("Success")
+                .message("Berhasil mengambil semua category")
+                .data(categoryService.getAllCategory())
+                .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                WebResponse.<List<Category>>builder()
+                    .status("Failed")
+                    .message("Category tidak ditemukan")
+                    .build());
+        }
     }
 }

@@ -21,7 +21,7 @@ public class WarehouseStock {
     private Warehouse warehouse;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = true)
     private Product product;
 
     private Integer quantity;

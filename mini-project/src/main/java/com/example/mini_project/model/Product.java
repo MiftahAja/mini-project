@@ -1,5 +1,6 @@
 package com.example.mini_project.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,11 +27,14 @@ public class Product {
 
     private Boolean isActive = true; 
 
+    @NotBlank(message = "Product sku kode must not be empty")
     @Column(unique = true)
     private String skuKode;
     
+    @NotBlank(message = "Product name must not be empty")
     private String name;
 
+    @NotNull(message = "Product price must not be empty")
     private double price;
     
     @ManyToOne
@@ -38,7 +45,7 @@ public class Product {
     private int version;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<WarehouseStock> warehouseStock;
 
     @JsonIgnore

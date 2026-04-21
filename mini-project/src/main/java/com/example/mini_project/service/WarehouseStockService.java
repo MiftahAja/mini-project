@@ -44,7 +44,7 @@ public class WarehouseStockService {
         }
 
         Product product = productRepo.findById(request.getProductId())
-            .orElseThrow(() -> new IllegalArgumentException("Product tidak ditemukan"));
+            .orElseThrow(() -> new IllegalArgumentException("Product dengan Id " + request.getProductId() + " tidak ditemukan"));
 
         if(!product.getIsActive()) {
             throw new IllegalArgumentException("Product tidak aktif, tidak dapat ditambahkan ke gudang");
@@ -94,10 +94,10 @@ public class WarehouseStockService {
         }
 
         Product product = productRepo.findById(request.getProductId())
-            .orElseThrow(() -> new IllegalArgumentException("Product tidak ditemukan"));
+            .orElseThrow(() -> new IllegalArgumentException("Product dengan Id " + request.getProductId() + " tidak ditemukan"));
 
         if (!product.getIsActive()) {
-            throw new IllegalArgumentException("Product tidak aktif");
+            throw new IllegalArgumentException("Product dengan Id " + request.getProductId() + " tidak aktif");
         }
 
         Warehouse fromWarehouse = warehouseRepo.findById(request.getFromWarehouseId())
@@ -158,6 +158,9 @@ public class WarehouseStockService {
     }
 
     public List<WarehouseStock> getLowStock() {
+        if (warehouseStockRepo.findLowStock().isEmpty()) {
+            throw new IllegalArgumentException("Product low stock tidak ditemukan");
+        }
         return warehouseStockRepo.findLowStock();
     }
 
@@ -165,7 +168,7 @@ public class WarehouseStockService {
         Integer total = warehouseStockRepo.amountWarehouseStocks(skuKode);
         
         if (productRepo.findBySkuKodeAndIsActive(skuKode, true) == null) {
-            throw new IllegalArgumentException("Product dengan sku " + skuKode + " tidak ditemukan");
+            throw new IllegalArgumentException("Product dengan sku " + skuKode + " tidak ditemukan di gudang");
         }
 
         return total != null ? total : 0;
