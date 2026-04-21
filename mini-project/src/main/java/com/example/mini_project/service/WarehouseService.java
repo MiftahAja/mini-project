@@ -38,4 +38,18 @@ public class WarehouseService {
     public List<Warehouse> getAllGudang() {
         return warehouseRepo.findAll();
     }
+
+    public Warehouse updateWarehouse(Long id, Warehouse databaru)  {
+        Warehouse warehouse = warehouseRepo.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Gudang tidak ditemukan"));
+
+        if (warehouseRepo.existsByCodeAndIdNot(databaru.getCode(), id)) {
+            throw new IllegalArgumentException("Kode gudang " + databaru.getCode() + " sudah dipakai");
+        }
+
+        warehouse.setName(databaru.getName());
+        warehouse.setCode(databaru.getCode());
+        
+        return warehouseRepo.save(warehouse);
+    }
 }
