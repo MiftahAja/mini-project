@@ -91,7 +91,7 @@ public class ProductC {
                 .status("Failed")
                 .message(e.getMessage())
                 .build();
-        
+        }
     }
 
     @PutMapping("/restore/{id}")
@@ -129,5 +129,5 @@ public class ProductC {
             .message("Berhasil mengambil stock product dengan sku " + sku )
             .data(total)
             .build();
-    }
+    }   
 }
