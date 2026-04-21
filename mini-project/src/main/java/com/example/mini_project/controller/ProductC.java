@@ -114,7 +114,7 @@ public class ProductC {
     public WebResponse<List<WarehouseStock>> lowStock() {
         return WebResponse.<List<WarehouseStock>>builder()
             .status("Success")
-            .message("Berhasil mengambil semua product")
+            .message("Berhasil mengambil semua product low stock")
             .data(warehouseStockService.getLowStock())
             .build();
     }
