@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Data telah diubah oleh user lain")
                 .build());
     }
 
@@ -54,7 +54,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Terjadi kesalahan pada server")
                 .build());
     }
 
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Data tidak ditemukan")
                 .build());
     }
 
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Input tidak valid")
                 .build());
     }
     
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Input tidak valid")
                 .build());
     }
 
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
             WebResponse.<String>builder()
                 .status("Failed")
-                .message(e.getMessage())
+                .message("Input tidak valid")
                 .build());
     }
 }
